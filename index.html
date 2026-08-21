@@ -125,8 +125,9 @@ canvas{flex:0 0 auto;width:168px;height:168px;display:block}
 
 .settle{margin-top:22px;background:linear-gradient(135deg,rgba(105,202,191,.14),rgba(116,208,153,.14));border-radius:12px;padding:18px}
 .settle h3{margin:0 0 12px;font-size:13px;font-weight:700;color:var(--teal-dark);text-transform:uppercase;letter-spacing:.06em}
-.settle .line{display:flex;justify-content:space-between;gap:12px;font-size:13px;padding:6px 0;color:var(--muted)}
-.settle .line span:last-child{font-weight:700;color:var(--ink)}
+.settle .line{display:flex;justify-content:space-between;align-items:baseline;gap:10px;font-size:13px;padding:6px 0;color:var(--muted)}
+.settle .line span:first-child{min-width:0}
+.settle .line span:last-child{font-weight:700;color:var(--ink);white-space:nowrap;flex-shrink:0}
 .settle .line.total{border-top:1px solid rgba(62,149,148,.3);margin-top:6px;padding-top:10px;font-size:15px}
 .settle .line.total span:last-child{color:var(--teal-dark);font-size:19px}
 
@@ -211,6 +212,8 @@ footer.legal a{color:var(--teal-dark);font-weight:600;text-decoration:none}
 
   .settle{padding:15px;margin-top:18px}
   .settle .line{font-size:12.5px}
+  .settle .line.total{font-size:13px}
+  .settle .line.total span:last-child{font-size:17px}
 
   .actions{flex-direction:column;gap:9px}
   .btn{width:100%;min-width:0;padding:15px}
@@ -236,6 +239,12 @@ footer.legal a{color:var(--teal-dark);font-weight:600;text-decoration:none}
   .control input{padding:11px 10px}
   table{font-size:11px}
   thead th,tbody td,tfoot td{padding:8px 10px}
+
+  /* Keep the total on one line even at 320px with six-figure amounts. */
+  .settle{padding:13px}
+  .settle .line{gap:8px}
+  .settle .line.total{font-size:12px}
+  .settle .line.total span:last-child{font-size:16px}
 }
 
 /* Single-page summary: drop the interactive chrome and tighten every gap. */
@@ -363,8 +372,6 @@ footer.legal a{color:var(--teal-dark);font-weight:600;text-decoration:none}
         <button class="btn btn-primary" id="calcBtn">Calculate</button>
         <button class="btn btn-ghost" id="printBtn">Print summary</button>
       </div>
-
-      <p class="note"><strong>Flat rate</strong> charges interest on the full financing amount for the whole tenure, so the true cost of borrowing (shown as EIR in the results) is close to double the advertised rate.</p>
     </div>
 
     <!-- RESULTS -->
@@ -408,7 +415,6 @@ footer.legal a{color:var(--teal-dark);font-weight:600;text-decoration:none}
       <div class="head">
         <div>
           <h2>Repayment schedule</h2>
-          <p>Rule 78 allocation. Balance shown is the total amount still payable.</p>
           <p class="swipe-hint">Swipe the table sideways to see all columns.</p>
         </div>
         <div class="head-actions">
