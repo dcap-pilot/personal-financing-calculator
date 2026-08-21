@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DCAP | Personal Financing Calculator</title>
+<meta name="description" content="DCAP personal financing calculator. Work out your monthly instalment and see the total principal and interest you repay over the tenure.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap" rel="stylesheet">
+<style>
+:root{
+  --teal:#69cabf;
+  --teal-dark:#3e9594;
+  --green:#74d099;
+  --navy:#454b6e;
+  --navy-deep:#2f3450;
+  --ink:#1f2437;
+  --muted:#6b7280;
+  --line:#e5e7eb;
+  --surface:#f7faf9;
+  --radius:16px;
+  --shadow:0 10px 30px rgba(47,52,80,.08);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  font-family:'DM Sans',system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+  color:var(--ink);
+  background:#eef3f2;
+  -webkit-font-smoothing:antialiased;
+  -webkit-tap-highlight-color:rgba(105,202,191,.25);
+  -webkit-text-size-adjust:100%;
+}
+.topbar{
+  background:linear-gradient(90deg,var(--teal-dark),var(--green));
+  color:#fff;text-align:center;font-size:12px;font-weight:700;
+  padding:8px 16px;letter-spacing:.02em;
+}
+.shell{max-width:1140px;margin:0 auto;padding:0 20px 56px}
+header.brand{padding:20px 0}
+header.brand img{height:38px;width:auto;display:block}
+
+.hero{padding:8px 0 22px}
+.hero h1{
+  margin:0 0 8px;font-size:clamp(24px,3.4vw,36px);
+  font-weight:700;letter-spacing:-.02em;color:var(--navy-deep);
+}
+.hero p{margin:0;color:var(--muted);font-size:15px;max-width:62ch;line-height:1.6}
+
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:22px;align-items:start}
+.card{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);padding:24px}
+
+.panel-title{
+  margin:0 0 20px;padding-bottom:14px;border-bottom:1px solid var(--line);
+  font-size:13px;font-weight:700;color:var(--teal-dark);
+  text-transform:uppercase;letter-spacing:.06em;
+}
+
+.field{margin-bottom:20px}
+.field .top{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:8px}
+label{font-size:13px;font-weight:600;color:var(--navy)}
+.hint{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:17px;height:17px;border-radius:50%;border:1px solid var(--teal);
+  color:var(--teal-dark);font-size:10px;font-weight:700;cursor:pointer;
+  margin-left:6px;vertical-align:middle;user-select:none;flex:0 0 auto;
+}
+.hint:active{background:var(--teal);color:#fff}
+.tip{
+  font-size:12px;line-height:1.5;color:var(--teal-dark);
+  background:rgba(105,202,191,.12);border-radius:8px;
+  padding:8px 10px;margin-bottom:8px;
+}
+.control{display:flex;align-items:stretch;border:1px solid var(--line);border-radius:10px;overflow:hidden;transition:.18s}
+.control:focus-within{border-color:var(--teal);box-shadow:0 0 0 3px rgba(105,202,191,.18)}
+.control .prefix,.control .suffix{
+  display:flex;align-items:center;padding:0 12px;background:var(--surface);
+  font-size:13px;font-weight:600;color:var(--muted);white-space:nowrap;
+}
+.control input{
+  flex:1;min-width:0;border:0;outline:0;padding:12px;
+  font-family:inherit;font-size:16px;font-weight:600;color:var(--ink);
+  background:#fff;text-align:right;
+}
+input[type=range]{
+  -webkit-appearance:none;appearance:none;width:100%;height:4px;margin:14px 0 0;
+  background:linear-gradient(90deg,var(--teal),var(--green));border-radius:4px;
+}
+input[type=range]::-webkit-slider-thumb{
+  -webkit-appearance:none;width:18px;height:18px;border-radius:50%;
+  background:#fff;border:3px solid var(--teal-dark);cursor:pointer;
+  box-shadow:0 2px 6px rgba(47,52,80,.25);
+}
+input[type=range]::-moz-range-thumb{
+  width:18px;height:18px;border-radius:50%;background:#fff;
+  border:3px solid var(--teal-dark);cursor:pointer;
+}
+.range-ends{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-top:4px}
+
+.methodbox{
+  border:1px solid var(--teal);border-radius:10px;padding:12px 14px;margin-bottom:22px;
+  background:rgba(105,202,191,.07);
+}
+.methodbox .m-title{font-size:13px;font-weight:700;color:var(--teal-dark);display:block;margin-bottom:3px}
+.methodbox .m-sub{font-size:11.5px;color:var(--muted);font-weight:500;line-height:1.55;display:block}
+
+.headline{text-align:center;padding:4px 0 18px;border-bottom:1px dashed var(--line)}
+.headline .k{font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+.headline .v{font-size:clamp(30px,4.6vw,42px);font-weight:700;color:var(--navy-deep);letter-spacing:-.02em;line-height:1.15;margin-top:6px}
+.chartwrap{display:flex;align-items:center;gap:24px;padding:22px 0;border-bottom:1px dashed var(--line);flex-wrap:wrap}
+canvas{flex:0 0 auto;width:168px;height:168px;display:block}
+.legend{flex:1 1 200px;min-width:0;display:grid;gap:13px}
+.legend .row{display:flex;align-items:center;gap:10px;font-size:13px;min-width:0}
+.legend .lbl{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.legend .amt{white-space:nowrap}
+.legend .dot{width:11px;height:11px;border-radius:3px;flex:0 0 auto}
+.legend .lbl{color:var(--muted);font-weight:500}
+.legend .amt{margin-left:auto;font-weight:700;color:var(--ink)}
+
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border-radius:12px;overflow:hidden;margin-top:20px}
+.stats div{background:#fff;padding:14px}
+.stats .k{font-size:13px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.04em;line-height:1.35}
+.stats .v{font-size:17px;font-weight:700;color:var(--navy-deep);margin-top:4px;white-space:nowrap}
+
+.settle{margin-top:22px;background:linear-gradient(135deg,rgba(105,202,191,.14),rgba(116,208,153,.14));border-radius:12px;padding:18px}
+.settle h3{margin:0 0 12px;font-size:13px;font-weight:700;color:var(--teal-dark);text-transform:uppercase;letter-spacing:.06em}
+.settle .line{display:flex;justify-content:space-between;gap:12px;font-size:13px;padding:6px 0;color:var(--muted)}
+.settle .line span:last-child{font-weight:700;color:var(--ink)}
+.settle .line.total{border-top:1px solid rgba(62,149,148,.3);margin-top:6px;padding-top:10px;font-size:15px}
+.settle .line.total span:last-child{color:var(--teal-dark);font-size:19px}
+
+.actions{display:flex;gap:10px;margin-top:22px;flex-wrap:wrap}
+.btn{
+  flex:1;min-width:150px;border:0;cursor:pointer;font-family:inherit;
+  font-size:14px;font-weight:700;padding:14px 18px;border-radius:10px;transition:.18s;
+}
+.btn-primary{background:linear-gradient(90deg,var(--teal-dark),var(--green));color:#fff}
+.btn-primary:hover{filter:brightness(1.06);transform:translateY(-1px)}
+.btn-ghost{background:#fff;color:var(--navy);border:1.5px solid var(--line)}
+.btn-ghost:hover{border-color:var(--teal);color:var(--teal-dark)}
+.btn-sm{flex:0 0 auto;min-width:0;font-size:13px;padding:11px 16px}
+.head-actions{display:flex;gap:8px;flex:0 0 auto}
+
+.schedule{margin-top:22px}
+.schedule .card{padding:0;overflow:hidden}
+.schedule .head{display:flex;align-items:center;justify-content:space-between;padding:18px 24px;gap:12px;flex-wrap:wrap}
+.schedule h2{margin:0;font-size:16px;font-weight:700;color:var(--navy-deep)}
+.schedule .head p{margin:2px 0 0;font-size:12px;color:var(--muted)}
+.tablewrap{max-height:420px;overflow:auto;-webkit-overflow-scrolling:touch;border-top:1px solid var(--line)}
+.swipe-hint{display:none}
+table{width:100%;border-collapse:collapse;font-size:13px}
+thead th{
+  position:sticky;top:0;background:var(--surface);text-align:right;
+  padding:11px 16px;font-size:11px;font-weight:700;color:var(--muted);
+  text-transform:uppercase;letter-spacing:.05em;white-space:nowrap;
+}
+thead th:first-child{text-align:left}
+tbody td{padding:10px 16px;text-align:right;border-top:1px solid var(--line);white-space:nowrap}
+tbody td:first-child{text-align:left;font-weight:600;color:var(--navy)}
+tbody tr:nth-child(12n){box-shadow:inset 0 -1px 0 var(--teal)}
+tfoot td{
+  position:sticky;bottom:0;background:var(--surface);padding:12px 16px;text-align:right;
+  font-weight:700;color:var(--navy-deep);border-top:2px solid var(--teal);white-space:nowrap;
+}
+tfoot td:first-child{text-align:left;text-transform:uppercase;font-size:11px;letter-spacing:.05em}
+tbody tr:hover{background:rgba(105,202,191,.13)}
+.badge{display:inline-block;font-size:10px;font-weight:700;color:var(--teal-dark);background:rgba(105,202,191,.2);padding:2px 7px;border-radius:20px;margin-left:8px}
+
+.note{font-size:11.5px;color:var(--muted);line-height:1.65;margin-top:18px}
+footer.legal{text-align:center;padding:26px 20px;font-size:11.5px;color:var(--muted);line-height:1.7}
+footer.legal a{color:var(--teal-dark);font-weight:600;text-decoration:none}
+.err{color:#b4232a;font-size:12px;font-weight:600;margin-top:6px;display:none}
+.err.show{display:block}
+
+@media (max-width:900px){
+  .grid{grid-template-columns:1fr}
+}
+
+/* Phones: single column, larger touch targets, stacked stats. */
+@media (max-width:720px){
+  .topbar{font-size:11px;padding:7px 14px;line-height:1.4}
+  .shell{padding:0 14px 40px}
+
+  header.brand{padding:14px 0}
+  header.brand img{height:29px}
+
+  .hero{padding:2px 0 16px}
+  .hero p{font-size:14px;line-height:1.55}
+
+  .grid{gap:16px}
+  .card{padding:18px 16px;border-radius:14px}
+  .panel-title{margin-bottom:16px;padding-bottom:12px}
+
+  /* Fatter track and thumb so the sliders are draggable by thumb. */
+  input[type=range]{height:6px;margin:18px 0 0}
+  input[type=range]::-webkit-slider-thumb{width:26px;height:26px;border-width:4px}
+  input[type=range]::-moz-range-thumb{width:26px;height:26px;border-width:4px}
+  .range-ends{margin-top:6px}
+
+  .headline .v{font-size:34px}
+
+  .chartwrap{justify-content:center;gap:18px;padding:20px 0}
+  .legend{flex:1 1 100%}
+
+  /* Three columns is too tight for currency values on a phone. */
+  .stats{grid-template-columns:1fr}
+  .stats div{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 14px}
+  .stats .k{font-size:13px;text-transform:none;letter-spacing:0}
+  .stats .v{font-size:15px;margin-top:0}
+
+  .settle{padding:15px;margin-top:18px}
+  .settle .line{font-size:12.5px}
+
+  .actions{flex-direction:column;gap:9px}
+  .btn{width:100%;min-width:0;padding:15px}
+
+  .schedule .head{padding:16px;flex-direction:column;align-items:stretch;gap:14px}
+  .head-actions{display:grid;grid-template-columns:1fr 1fr}
+  .head-actions .btn{width:100%;padding:13px 10px}
+  .swipe-hint{display:block;font-size:11px;color:var(--muted);margin:4px 0 0}
+
+  table{font-size:12px}
+  thead th,tbody td,tfoot td{padding:9px 12px}
+  .tablewrap{max-height:60vh}
+
+  .note{font-size:11px;margin-top:14px}
+  footer.legal{padding:20px 0 0}
+}
+
+@media (max-width:400px){
+  .hero h1{font-size:21px}
+  .headline .v{font-size:29px}
+  canvas{width:142px;height:142px}
+  .head-actions{grid-template-columns:1fr}
+  .control input{padding:11px 10px}
+  table{font-size:11px}
+  thead th,tbody td,tfoot td{padding:8px 10px}
+}
+
+/* Single-page summary: drop the interactive chrome and tighten every gap. */
+@media print{
+  @page{size:A4 portrait;margin:9mm}
+  html,body{background:#fff}
+  body{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+
+  .topbar,.actions,.schedule,.err,.tip,
+  input[type=range],.range-ends,.hint{display:none !important}
+
+  .shell{max-width:none;padding:0}
+  header.brand{padding:0 0 6px;border-bottom:1px solid var(--line)}
+  header.brand img{height:26px}
+
+  .hero{padding:8px 0 10px}
+  .hero h1{font-size:16px;margin-bottom:3px}
+  .hero p{font-size:9.5px;line-height:1.45;max-width:none}
+
+  .grid{grid-template-columns:1.02fr 1fr;gap:10px}
+  .card{box-shadow:none;border:1px solid var(--line);padding:12px;break-inside:avoid}
+
+  .panel-title{font-size:10px;margin-bottom:12px;padding-bottom:7px}
+  .field{margin-bottom:11px}
+  .field .top{margin-bottom:4px}
+  label{font-size:10px}
+  .control{border-radius:7px}
+  .control input{padding:6px 8px;font-size:12px}
+  .control .prefix,.control .suffix{padding:0 8px;font-size:10px}
+
+  .methodbox{padding:8px 10px;margin-bottom:0}
+  .methodbox .m-title{font-size:10px;margin-bottom:2px}
+  .methodbox .m-sub{font-size:8.5px;line-height:1.4}
+
+  .headline{padding:0 0 10px}
+  .headline .k{font-size:9px}
+  .headline .v{font-size:24px;margin-top:2px}
+  .chartwrap{padding:12px 0;gap:14px;flex-wrap:nowrap}
+  canvas{width:112px;height:112px}
+  .legend{gap:7px;flex-basis:auto}
+  .legend .row{font-size:9.5px;gap:7px}
+  .legend .dot{width:8px;height:8px}
+
+  .stats{margin-top:11px;border-radius:8px}
+  .stats div{padding:8px 9px}
+  .stats .k{font-size:10px}
+  .stats .v{font-size:12px;margin-top:2px}
+
+  .settle{margin-top:11px;padding:11px;border-radius:8px}
+  .settle h3{font-size:10px;margin-bottom:7px}
+  .settle .line{font-size:9.5px;padding:3px 0}
+  .settle .line.total{font-size:11px;margin-top:4px;padding-top:6px}
+  .settle .line.total span:last-child{font-size:13px}
+
+  .note{font-size:8px;line-height:1.45;margin-top:9px}
+  footer.legal{padding:9px 0 0;font-size:7.5px;line-height:1.5}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">Inclusive, Fair, Data-Driven Financing Solutions for Everyone</div>
+
+<div class="shell">
+  <header class="brand">
+    <a href="https://dcap.com.my/" aria-label="DCAP home">
+      <img src="assets/dcap-logo.png" alt="DCAP">
+    </a>
+  </header>
+
+  <section class="hero">
+    <h1>How much will your personal financing cost each month?</h1>
+    <p>Enter your financing amount, rate and tenure to see your monthly instalment, then how much of the total you repay is principal and how much is interest.</p>
+  </section>
+
+  <div class="grid">
+    <!-- INPUTS -->
+    <div class="card">
+      <p class="panel-title">Personal financing details</p>
+
+      <div class="field">
+        <div class="top">
+          <label for="amount">Financing amount<span class="hint" title="The amount you wish to borrow.">?</span></label>
+        </div>
+        <div class="control">
+          <span class="prefix">RM</span>
+          <input id="amount" type="text" inputmode="decimal" value="50,000">
+        </div>
+        <input id="amountRange" type="range" min="10000" max="200000" step="1000" value="50000" aria-label="Financing amount slider">
+        <div class="range-ends"><span>RM 10,000</span><span>RM 200,000</span></div>
+      </div>
+
+      <div class="field">
+        <div class="top">
+          <label for="rate">Interest rate p.a.<span class="hint" title="The advertised flat rate per annum.">?</span></label>
+        </div>
+        <div class="control">
+          <input id="rate" type="text" inputmode="decimal" value="6.00">
+          <span class="suffix">% p.a. flat</span>
+        </div>
+        <input id="rateRange" type="range" min="1" max="18" step="0.05" value="6" aria-label="Interest rate slider">
+        <div class="range-ends"><span>1.00%</span><span>18.00%</span></div>
+      </div>
+
+      <div class="field">
+        <div class="top">
+          <label for="tenure">Tenure<span class="hint" title="Total repayment period in years.">?</span></label>
+        </div>
+        <div class="control">
+          <input id="tenure" type="text" inputmode="numeric" value="5">
+          <span class="suffix">year(s)</span>
+        </div>
+        <input id="tenureRange" type="range" min="4" max="10" step="1" value="5" aria-label="Tenure slider">
+        <div class="range-ends"><span>4 years</span><span>10 years</span></div>
+      </div>
+
+      <div class="methodbox">
+        <span class="m-title">Flat rate (Rule 78)</span>
+        <span class="m-sub">Interest is pre-computed from the flat rate and allocated across the tenure on a sum-of-digits basis, so earlier instalments carry more interest.</span>
+      </div>
+
+      <p class="err" id="err"></p>
+
+      <div class="actions">
+        <button class="btn btn-primary" id="calcBtn">Calculate</button>
+        <button class="btn btn-ghost" id="printBtn">Print summary</button>
+      </div>
+
+      <p class="note"><strong>Flat rate</strong> charges interest on the full financing amount for the whole tenure, so the true cost of borrowing (shown as EIR in the results) is close to double the advertised rate.</p>
+    </div>
+
+    <!-- RESULTS -->
+    <div class="card">
+      <div class="headline">
+        <div class="k">Monthly instalment</div>
+        <div class="v" id="rMonthly">RM 0.00</div>
+      </div>
+
+      <div class="chartwrap">
+        <canvas id="donut" width="336" height="336" role="img" aria-label="Principal versus interest breakdown"></canvas>
+        <div class="legend">
+          <div class="row"><span class="dot" style="background:var(--navy)"></span><span class="lbl">Principal</span><span class="amt" id="rPrincipal">RM 0.00</span></div>
+          <div class="row"><span class="dot" style="background:var(--teal)"></span><span class="lbl">Total interest</span><span class="amt" id="rInterest">RM 0.00</span></div>
+          <div class="row"><span class="dot" style="background:var(--line)"></span><span class="lbl">Total payable</span><span class="amt" id="rTotal">RM 0.00</span></div>
+        </div>
+      </div>
+
+      <div class="stats">
+        <div><div class="k">EIR (%)</div><div class="v" id="rEir">0.00%</div></div>
+        <div><div class="k">Final instalment</div><div class="v" id="rFinal">RM 0.00</div></div>
+        <div><div class="k">No. of instalments</div><div class="v" id="rCount">0</div></div>
+      </div>
+
+      <div class="settle">
+        <h3>What you repay in total</h3>
+        <div class="line"><span>Principal borrowed</span><span id="sPrincipal">RM 0.00</span></div>
+        <div class="line"><span>Total interest charged</span><span id="sInterest">RM 0.00</span></div>
+        <div class="line"><span>Instalments 1 to <span id="sN1">0</span></span><span id="sCount">0 &times; RM 0.00</span></div>
+        <div class="line"><span>Final instalment</span><span id="sFinal">RM 0.00</span></div>
+        <div class="line total"><span>Total amount payable</span><span id="sTotal">RM 0.00</span></div>
+      </div>
+
+      <p class="note">Estimates exclude stamp duty, insurance, processing fees and any other charges, which vary by financier and product.</p>
+    </div>
+  </div>
+
+  <!-- SCHEDULE -->
+  <div class="schedule">
+    <div class="card">
+      <div class="head">
+        <div>
+          <h2>Repayment schedule</h2>
+          <p>Rule 78 allocation. Balance shown is the total amount still payable.</p>
+          <p class="swipe-hint">Swipe the table sideways to see all columns.</p>
+        </div>
+        <div class="head-actions">
+          <button class="btn btn-ghost btn-sm" id="csvBtn">Download CSV</button>
+          <button class="btn btn-ghost btn-sm" id="toggleBtn">Show schedule</button>
+        </div>
+      </div>
+      <div class="tablewrap" id="tablewrap" hidden>
+        <table>
+          <thead>
+            <tr>
+              <th>No.</th><th>Instalment</th><th>Interest</th><th>Principal</th><th>Balance payable</th>
+            </tr>
+          </thead>
+          <tbody id="tbody"></tbody>
+          <tfoot id="tfoot"></tfoot>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <footer class="legal">
+    All figures are indicative estimates for illustration only and do not constitute an offer of credit or financial advice.<br>
+    &copy; <span id="year"></span> DCAP Digital. <a href="https://dcap.com.my/">dcap.com.my</a>
+  </footer>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  var LIMITS = {minAmount:10000, maxAmount:200000, minTenure:4, maxTenure:10, maxRate:30};
+
+  var $ = function(id){ return document.getElementById(id); };
+  var els = {
+    amount:$("amount"), amountRange:$("amountRange"),
+    rate:$("rate"), rateRange:$("rateRange"),
+    tenure:$("tenure"), tenureRange:$("tenureRange"),
+    err:$("err")
+  };
+
+  var fmt = new Intl.NumberFormat("en-MY",{minimumFractionDigits:2,maximumFractionDigits:2});
+  var int = new Intl.NumberFormat("en-MY");
+  function money(n){ return "RM " + fmt.format(isFinite(n) ? n : 0); }
+  function num(v){ var n = parseFloat(String(v).replace(/[^0-9.\-]/g,"")); return isFinite(n) ? n : 0; }
+  function clamp(n,lo,hi){ return Math.min(hi, Math.max(lo, n)); }
+
+  /* ---------- maths (mirrors the Repayment Schedule Generator, Rule 78) ---------- */
+
+  function round2(v){ return Math.round((v + Number.EPSILON) * 100) / 100; }
+
+  // Flat rate to effective interest rate, per the Repayment Schedule Generator.
+  function computeEir(months, flatRate){
+    var num = 2 * months * flatRate * (300*12 + months*flatRate);
+    var den = (2 * months * months * flatRate) + (300 * 12 * (months + 1));
+    return den === 0 ? 0 : round2(num / den);
+  }
+
+  function compute(inp){
+    var p = inp.amount, n = inp.months, rate = inp.rate;
+
+    // Interest is pre-computed, then instalments are rounded up to whole ringgit;
+    // the shortfall is absorbed by a smaller final instalment.
+    var totalInterest = Math.ceil(p * (rate/100) * (n/12));
+    var totalPayable = p + totalInterest;
+    var monthly = Math.ceil(totalPayable / n);
+    var finalInst = Math.ceil(totalPayable - monthly * (n - 1));
+
+    var sumOfDigits = n*(n+1)/2;
+    var schedule = [], balance = totalPayable, interestSoFar = 0;
+
+    for(var i=0;i<n;i++){
+      var no = i + 1;
+      var inst = (no === n) ? finalInst : monthly;
+      var interest = (no === n)
+        ? Math.max(0, totalInterest - interestSoFar)
+        : Math.round((n - i) / sumOfDigits * totalInterest);
+
+      interestSoFar += interest;
+      balance -= inst;
+
+      schedule.push({
+        no:no,
+        inst:inst,
+        interest:interest,
+        principal:inst - interest,
+        balance:(no === n) ? 0 : Math.max(0, balance)
+      });
+    }
+
+    return {
+      principal:p,
+      months:n,
+      monthly:monthly,
+      finalInst:finalInst,
+      totalInterest:totalInterest,
+      totalPayable:totalPayable,
+      eir:computeEir(n, rate),
+      schedule:schedule
+    };
+  }
+
+  /* ---------- chart ---------- */
+
+  function donut(principal, interest){
+    var c = $("donut"), ctx = c.getContext("2d");
+    var total = principal + interest;
+    var dpr = 2, size = c.width/dpr, cx = size/2, cy = size/2;
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    ctx.clearRect(0,0,size,size);
+    if(total <= 0) return;
+
+    // Keep the outer edge of the stroke inside the canvas: R + thick/2 + padding <= size/2.
+    var thick = size*0.15, R = size/2 - thick/2 - 3;
+    var parts = [
+      {v:principal, col:"#454b6e"},
+      {v:interest,  col:"#69cabf"}
+    ];
+    var start = -Math.PI/2;
+    parts.forEach(function(part){
+      var sweep = (part.v/total) * Math.PI*2;
+      if(sweep <= 0) return;
+      ctx.beginPath();
+      ctx.arc(cx,cy,R,start,start+sweep);
+      ctx.strokeStyle = part.col;
+      ctx.lineWidth = thick;
+      ctx.stroke();
+      start += sweep;
+    });
+
+    var pct = Math.round(interest/total*100);
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillStyle = "#6b7280";
+    ctx.font = "600 10px 'DM Sans',sans-serif";
+    ctx.fillText("INTEREST", cx, cy - 15);
+    ctx.fillStyle = "#2f3450";
+    ctx.font = "700 25px 'DM Sans',sans-serif";
+    ctx.fillText(pct + "%", cx, cy + 8);
+  }
+
+  /* ---------- render ---------- */
+
+  var scheduleOpen = false;
+
+  function readInputs(){
+    var amount = clamp(num(els.amount.value), LIMITS.minAmount, LIMITS.maxAmount);
+    var rate   = clamp(num(els.rate.value), 0, LIMITS.maxRate);
+    var tenure = clamp(Math.round(num(els.tenure.value)), LIMITS.minTenure, LIMITS.maxTenure);
+    var months = tenure*12;
+    return {amount:amount, rate:rate, tenure:tenure, months:months};
+  }
+
+  function syncControls(inp){
+    els.amount.value = int.format(inp.amount);
+    els.amountRange.value = inp.amount;
+    els.rate.value = inp.rate.toFixed(2);
+    els.rateRange.value = inp.rate;
+    els.tenure.value = inp.tenure;
+    els.tenureRange.value = inp.tenure;
+  }
+
+  function render(){
+    var inp = readInputs();
+    syncControls(inp);
+    var res = compute(inp);
+
+    $("rMonthly").textContent = money(res.monthly);
+    $("rPrincipal").textContent = money(res.principal);
+    $("rInterest").textContent = money(res.totalInterest);
+    $("rTotal").textContent = money(res.totalPayable);
+    $("rEir").textContent = res.eir.toFixed(2) + "%";
+    $("rFinal").textContent = money(res.finalInst);
+    $("rCount").textContent = res.months + " mo";
+
+    $("sPrincipal").textContent = money(res.principal);
+    $("sInterest").textContent = money(res.totalInterest);
+    $("sN1").textContent = res.months - 1;
+    $("sCount").textContent = (res.months - 1) + " \u00D7 " + money(res.monthly);
+    $("sFinal").textContent = money(res.finalInst);
+    $("sTotal").textContent = money(res.totalPayable);
+
+    donut(res.principal, res.totalInterest);
+    if(scheduleOpen) buildTable(res);
+    else $("tbody").dataset.stale = "1";
+    lastRes = res;
+  }
+
+  var lastRes = null;
+
+  function buildTable(res){
+    var totInst = 0, totInt = 0, totPrin = 0;
+    var rows = res.schedule.map(function(row){
+      totInst += row.inst; totInt += row.interest; totPrin += row.principal;
+      return "<tr>" +
+        "<td>" + row.no + "</td>" +
+        "<td>" + money(row.inst) + "</td>" +
+        "<td>" + money(row.interest) + "</td>" +
+        "<td>" + money(row.principal) + "</td>" +
+        "<td>" + money(row.balance) + "</td>" +
+      "</tr>";
+    });
+    $("tbody").innerHTML = rows.join("");
+    $("tfoot").innerHTML = "<tr>" +
+      "<td>Total</td>" +
+      "<td>" + money(round2(totInst)) + "</td>" +
+      "<td>" + money(round2(totInt)) + "</td>" +
+      "<td>" + money(round2(totPrin)) + "</td>" +
+      "<td>-</td>" +
+    "</tr>";
+  }
+
+  function downloadCsv(){
+    var res = lastRes;
+    if(!res) return;
+    var rows = [
+      ["Method","Flat Rate - Rule 78"],
+      ["Financing Amount",res.principal],
+      ["Flat Rate (%)",els.rate.value],
+      ["EIR (%)",res.eir],
+      ["Tenure (months)",res.months],
+      ["Total Interest",res.totalInterest],
+      ["Total Payable",res.totalPayable],
+      ["Monthly Instalment",res.monthly],
+      ["Final Instalment",res.finalInst],
+      [],
+      ["No.","Instalment","Interest","Principal","Balance Payable"]
+    ];
+    res.schedule.forEach(function(r){
+      rows.push([r.no, r.inst.toFixed(2), r.interest.toFixed(2), r.principal.toFixed(2), r.balance.toFixed(2)]);
+    });
+
+    var csv = rows.map(function(r){ return r.join(","); }).join("\n");
+    var url = URL.createObjectURL(new Blob([csv], {type:"text/csv"}));
+    var a = document.createElement("a");
+    a.href = url;
+    a.download = "dcap-repayment-schedule-" + new Date().toISOString().slice(0,10) + ".csv";
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  /* ---------- wiring ---------- */
+
+  [["amountRange","amount"],["rateRange","rate"],["tenureRange","tenure"]]
+    .forEach(function(pair){
+      $(pair[0]).addEventListener("input", function(){
+        $(pair[1]).value = this.value;
+        render();
+      });
+    });
+
+  ["amount","rate","tenure"].forEach(function(id){
+    $(id).addEventListener("input", function(){
+      // Let the user type freely; only reformat on blur.
+      var raw = num(this.value);
+      var slider = $(id + "Range");
+      if(slider) slider.value = raw;
+    });
+    $(id).addEventListener("blur", render);
+    $(id).addEventListener("keydown", function(e){ if(e.key === "Enter") render(); });
+  });
+
+  $("calcBtn").addEventListener("click", render);
+  $("printBtn").addEventListener("click", function(){ window.print(); });
+  $("csvBtn").addEventListener("click", downloadCsv);
+
+  $("toggleBtn").addEventListener("click", function(){
+    scheduleOpen = !scheduleOpen;
+    $("tablewrap").hidden = !scheduleOpen;
+    this.textContent = scheduleOpen ? "Hide schedule" : "Show schedule";
+    if(scheduleOpen && lastRes) buildTable(lastRes);
+  });
+
+  // Hover tooltips are unreachable on touch, so make the "?" markers tappable.
+  document.querySelectorAll(".hint").forEach(function(h){
+    h.setAttribute("role","button");
+    h.setAttribute("tabindex","0");
+    h.addEventListener("click", function(){
+      var field = h.closest(".field");
+      var open = field.querySelector(".tip");
+      if(open){ open.remove(); return; }
+      var tip = document.createElement("div");
+      tip.className = "tip";
+      tip.textContent = h.getAttribute("title");
+      field.insertBefore(tip, field.querySelector(".control"));
+    });
+  });
+
+  $("year").textContent = new Date().getFullYear();
+  render();
+
+  // Canvas text is rasterised once, so redraw after DM Sans finishes loading.
+  if(document.fonts && document.fonts.ready) document.fonts.ready.then(render);
+})();
+</script>
+</body>
+</html>
