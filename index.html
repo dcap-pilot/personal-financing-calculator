@@ -43,11 +43,9 @@ header.brand img{height:38px;width:auto;display:block}
 
 .hero{padding:8px 0 22px}
 .hero h1{
-  margin:0 0 8px;font-size:clamp(24px,3.4vw,36px);
+  margin:0;font-size:clamp(24px,3.4vw,36px);
   font-weight:700;letter-spacing:-.02em;color:var(--navy-deep);
 }
-.hero p{margin:0;color:var(--muted);font-size:15px;max-width:62ch;line-height:1.6}
-
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:22px;align-items:start}
 .card{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);padding:24px}
 
@@ -98,13 +96,6 @@ input[type=range]::-moz-range-thumb{
 }
 .range-ends{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-top:4px}
 
-.methodbox{
-  border:1px solid var(--teal);border-radius:10px;padding:12px 14px;margin-bottom:22px;
-  background:rgba(105,202,191,.07);
-}
-.methodbox .m-title{font-size:13px;font-weight:700;color:var(--teal-dark);display:block;margin-bottom:3px}
-.methodbox .m-sub{font-size:11.5px;color:var(--muted);font-weight:500;line-height:1.55;display:block}
-
 .headline{text-align:center;padding:4px 0 18px;border-bottom:1px dashed var(--line)}
 .headline .k{font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
 .headline .v{font-size:clamp(30px,4.6vw,42px);font-weight:700;color:var(--navy-deep);letter-spacing:-.02em;line-height:1.15;margin-top:6px}
@@ -117,11 +108,6 @@ canvas{flex:0 0 auto;width:168px;height:168px;display:block}
 .legend .dot{width:11px;height:11px;border-radius:3px;flex:0 0 auto}
 .legend .lbl{color:var(--muted);font-weight:500}
 .legend .amt{margin-left:auto;font-weight:700;color:var(--ink)}
-
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border-radius:12px;overflow:hidden;margin-top:20px}
-.stats div{background:#fff;padding:14px}
-.stats .k{font-size:13px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.04em;line-height:1.35}
-.stats .v{font-size:17px;font-weight:700;color:var(--navy-deep);margin-top:4px;white-space:nowrap}
 
 .settle{margin-top:22px;background:linear-gradient(135deg,rgba(105,202,191,.14),rgba(116,208,153,.14));border-radius:12px;padding:18px}
 .settle h3{margin:0 0 12px;font-size:13px;font-weight:700;color:var(--teal-dark);text-transform:uppercase;letter-spacing:.06em}
@@ -187,7 +173,6 @@ footer.legal a{color:var(--teal-dark);font-weight:600;text-decoration:none}
   header.brand img{height:29px}
 
   .hero{padding:2px 0 16px}
-  .hero p{font-size:14px;line-height:1.55}
 
   .grid{gap:16px}
   .card{padding:18px 16px;border-radius:14px}
@@ -203,12 +188,6 @@ footer.legal a{color:var(--teal-dark);font-weight:600;text-decoration:none}
 
   .chartwrap{justify-content:center;gap:18px;padding:20px 0}
   .legend{flex:1 1 100%}
-
-  /* Three columns is too tight for currency values on a phone. */
-  .stats{grid-template-columns:1fr}
-  .stats div{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 14px}
-  .stats .k{font-size:13px;text-transform:none;letter-spacing:0}
-  .stats .v{font-size:15px;margin-top:0}
 
   .settle{padding:15px;margin-top:18px}
   .settle .line{font-size:12.5px}
@@ -261,8 +240,7 @@ footer.legal a{color:var(--teal-dark);font-weight:600;text-decoration:none}
   header.brand img{height:26px}
 
   .hero{padding:8px 0 10px}
-  .hero h1{font-size:16px;margin-bottom:3px}
-  .hero p{font-size:9.5px;line-height:1.45;max-width:none}
+  .hero h1{font-size:16px}
 
   .grid{grid-template-columns:1.02fr 1fr;gap:10px}
   .card{box-shadow:none;border:1px solid var(--line);padding:12px;break-inside:avoid}
@@ -275,10 +253,6 @@ footer.legal a{color:var(--teal-dark);font-weight:600;text-decoration:none}
   .control input{padding:6px 8px;font-size:12px}
   .control .prefix,.control .suffix{padding:0 8px;font-size:10px}
 
-  .methodbox{padding:8px 10px;margin-bottom:0}
-  .methodbox .m-title{font-size:10px;margin-bottom:2px}
-  .methodbox .m-sub{font-size:8.5px;line-height:1.4}
-
   .headline{padding:0 0 10px}
   .headline .k{font-size:9px}
   .headline .v{font-size:24px;margin-top:2px}
@@ -287,11 +261,6 @@ footer.legal a{color:var(--teal-dark);font-weight:600;text-decoration:none}
   .legend{gap:7px;flex-basis:auto}
   .legend .row{font-size:9.5px;gap:7px}
   .legend .dot{width:8px;height:8px}
-
-  .stats{margin-top:11px;border-radius:8px}
-  .stats div{padding:8px 9px}
-  .stats .k{font-size:10px}
-  .stats .v{font-size:12px;margin-top:2px}
 
   .settle{margin-top:11px;padding:11px;border-radius:8px}
   .settle h3{font-size:10px;margin-bottom:7px}
@@ -317,7 +286,6 @@ footer.legal a{color:var(--teal-dark);font-weight:600;text-decoration:none}
 
   <section class="hero">
     <h1>How much will your personal financing cost each month?</h1>
-    <p>Enter your financing amount, rate and tenure to see your monthly instalment, then how much of the total you repay is principal and how much is interest.</p>
   </section>
 
   <div class="grid">
@@ -361,11 +329,6 @@ footer.legal a{color:var(--teal-dark);font-weight:600;text-decoration:none}
         <div class="range-ends"><span>4 years</span><span>10 years</span></div>
       </div>
 
-      <div class="methodbox">
-        <span class="m-title">Flat rate (Rule 78)</span>
-        <span class="m-sub">Interest is pre-computed from the flat rate and allocated across the tenure on a sum-of-digits basis, so earlier instalments carry more interest.</span>
-      </div>
-
       <p class="err" id="err"></p>
 
       <div class="actions">
@@ -390,16 +353,11 @@ footer.legal a{color:var(--teal-dark);font-weight:600;text-decoration:none}
         </div>
       </div>
 
-      <div class="stats">
-        <div><div class="k">EIR (%)</div><div class="v" id="rEir">0.00%</div></div>
-        <div><div class="k">Final instalment</div><div class="v" id="rFinal">RM 0.00</div></div>
-        <div><div class="k">No. of instalments</div><div class="v" id="rCount">0</div></div>
-      </div>
-
       <div class="settle">
         <h3>What you repay in total</h3>
         <div class="line"><span>Principal borrowed</span><span id="sPrincipal">RM 0.00</span></div>
         <div class="line"><span>Total interest charged</span><span id="sInterest">RM 0.00</span></div>
+        <div class="line"><span>No. of instalments</span><span id="rCount">0</span></div>
         <div class="line"><span>Instalments 1 to <span id="sN1">0</span></span><span id="sCount">0 &times; RM 0.00</span></div>
         <div class="line"><span>Final instalment</span><span id="sFinal">RM 0.00</span></div>
         <div class="line total"><span>Total amount payable</span><span id="sTotal">RM 0.00</span></div>
@@ -586,9 +544,7 @@ footer.legal a{color:var(--teal-dark);font-weight:600;text-decoration:none}
     $("rPrincipal").textContent = money(res.principal);
     $("rInterest").textContent = money(res.totalInterest);
     $("rTotal").textContent = money(res.totalPayable);
-    $("rEir").textContent = res.eir.toFixed(2) + "%";
-    $("rFinal").textContent = money(res.finalInst);
-    $("rCount").textContent = res.months + " mo";
+    $("rCount").textContent = res.months + " months";
 
     $("sPrincipal").textContent = money(res.principal);
     $("sInterest").textContent = money(res.totalInterest);
